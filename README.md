@@ -37,7 +37,7 @@ L'emplacement de l'archive sur S3 se définit dans un secret Onyxia :
 
 | Nom de la variable | Valeur |
 |--------------------|--------|
-| `LODEX_TEMPLATE` | `default/<bucket>/lodex-templates/templates.zip` |
+| `LODEX_TEMPLATE` | `default/<username>/lodex-templates/templates.zip` |
 
 
 ## 2. Récupérer les modèles Lodex (en local)
