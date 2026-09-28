@@ -36,11 +36,11 @@ export TEMPLATE_FILE="data/$(basename "$LODEX_TEMPLATE")"
 
 # duckdb, mc, unzip... come from flake.nix
 nix develop datalab --no-write-lock-file --command bash -euo pipefail -c '
-    mc cp s3/"$LODEX_TEMPLATE" "$TEMPLATE_FILE"
-    unzip -o -q -d data .
-    find data -name "*.tar.gz" -execdir tar -xzf {} \;
+    mc cp s3/"$LODEX_TEMPLATE" .
+    unzip -o -q -d data $(basename "$LODEX_TEMPLATE")
+    find data -name "*.tar.gz" -execdir tar -xf {} \;
 
     # Run from data/ so the globs in up.sql do not scan the whole repository
     cd data
-    duckdb ../lodex-template-usage.db -c ".read ../sql/up.sql"
+    duckdb ../lodex-template-usage.db -no-stdin -init "$WORKSPACE_DIR"/$(basename "$GIT_REPOSITORY")/sql/up.sql
 '
