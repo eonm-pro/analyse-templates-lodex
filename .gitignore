@@ -1,0 +1,5 @@
+templates/
+data/
+*.zip
+*.db
+*.tsv

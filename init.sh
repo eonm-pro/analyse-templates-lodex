@@ -25,10 +25,22 @@ echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.profile
 
 nix registry add datalab "$WORKSPACE_DIR/$(basename ${GIT_REPOSITORY:-datalab})"
 
+: "${LODEX_TEMPLATE:?LODEX_TEMPLATE must be set (secret Onyxia)}"
+
+cd "$WORKSPACE_DIR/$(basename ${GIT_REPOSITORY:-datalab})"
+
+rm -rf data
 mkdir -p data
-mc cp "$LODEX_TEMPLATE" "$TEMPLATE_FILE"
-unzip -o -d data "$TEMPLATE_FILE"
 
-find data -name "*.tar.gz" -execdir tar -xzf {} \;
+export TEMPLATE_FILE="data/$(basename "$LODEX_TEMPLATE")"
 
-duckdb lodex-template-usage.db -c ".read sql/up.sql"
+# duckdb, mc, unzip... come from flake.nix
+nix develop datalab --command bash -euo pipefail -c '
+    mc cp "$LODEX_TEMPLATE" "$TEMPLATE_FILE"
+    unzip -o -q -d data "$TEMPLATE_FILE"
+    find data -name "*.tar.gz" -execdir tar -xzf {} \;
+
+    # Run from data/ so the globs in up.sql do not scan the whole repository
+    cd data
+    duckdb ../lodex-template-usage.db -c ".read ../sql/up.sql"
+'

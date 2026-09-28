@@ -39,13 +39,15 @@ L'emplacement de l'archive sur S3 se définit dans un secret Onyxia :
 |--------------------|--------|
 | `LODEX_TEMPLATE` | `default/<bucket>/lodex-templates/templates.zip` |
 
+
 ## 2. Récupérer les modèles Lodex (en local)
 
-Prérequis : `ezcrawl`, `lodex-cli`, `jq`, `zip` et `mc`.
+Prérequis : [nix](https://nixos.org/download) (avec les flakes activés), `ezcrawl` et `lodex-cli`. Les autres outils (`jq`, `zip`, `mc`) sont fournis par le `flake.nix` du dépôt.
 
-Coller dans le terminal le script `mc` copié à l'étape 1, puis lancer le harvest :
+Depuis la racine du dépôt, ouvrir l'environnement, coller le script `mc` copié à l'étape 1, puis lancer le harvest :
 
 ```bash
+nix develop
 export MC_HOST_default='https://...'
 export S3_DEST="default/<bucket>/lodex-templates"
 ./harvest.sh
@@ -63,10 +65,12 @@ Le script init.sh télécharge et décompresse l'archive dans `data/`, puis exé
 - `routine_usage` : routines appelées
 - `enrichment_webservices_usage` : web services d'enrichissement
 
+Les outils (`duckdb`, `mc`, ...) sont fournis par le flake : les commandes suivantes s'exécutent depuis la racine du dépôt, dans `nix develop`.
+
 Pour rejouer uniquement l'analyse sur des données déjà extraites :
 
 ```bash
-duckdb lodex-template-usage.db -c ".read sql/up.sql"
+(cd data && duckdb ../lodex-template-usage.db -c ".read ../sql/up.sql")
 ```
 
 Exemple de requête :
