@@ -32,7 +32,7 @@ export MC_HOST_default='https://...'
 L'emplacement de l'archive sur S3 se définit dans un secret Onyxia :
 
 1. Dans Onyxia, ouvrir **Mes secrets**.
-2. Créer un secret (**Nouveau secret**): `lodex-template-usage`.
+2. [Créer un secret](https://datalab.sspcloud.fr/my-secrets) (**Nouveau secret**): `lodex-template-usage`.
 3. Y ajouter la variable (**Ajouter une variable**) :
 
 | Nom de la variable | Valeur |
