@@ -36,7 +36,7 @@ export TEMPLATE_FILE="data/$(basename "$LODEX_TEMPLATE")"
 
 # duckdb, mc, unzip... come from flake.nix
 nix develop datalab --command bash -euo pipefail -c '
-    mc cp "$LODEX_TEMPLATE" "$TEMPLATE_FILE"
+    mc cp s3/"$LODEX_TEMPLATE" "$TEMPLATE_FILE"
     unzip -o -q -d data "$TEMPLATE_FILE"
     find data -name "*.tar.gz" -execdir tar -xzf {} \;
 
