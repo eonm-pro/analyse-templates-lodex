@@ -24,3 +24,11 @@ echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.bashrc
 echo 'export PATH="$HOME/.nix-profile/bin:$PATH"' >> ~/.profile
 
 nix registry add datalab "$WORKSPACE_DIR/$(basename ${GIT_REPOSITORY:-datalab})"
+
+mkdir -p data
+mc cp "$LODEX_TEMPLATE" "$TEMPLATE_FILE"
+unzip -o -d data "$TEMPLATE_FILE"
+
+find data -name "*.tar.gz" -execdir tar -xzf {} \;
+
+duckdb lodex-template-usage.db -c ".read sql/up.sql"
