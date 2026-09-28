@@ -35,9 +35,9 @@ mkdir -p data
 export TEMPLATE_FILE="data/$(basename "$LODEX_TEMPLATE")"
 
 # duckdb, mc, unzip... come from flake.nix
-nix develop datalab --command bash -euo pipefail -c '
+nix develop datalab --no-write-lock-file --command bash -euo pipefail -c '
     mc cp s3/"$LODEX_TEMPLATE" "$TEMPLATE_FILE"
-    unzip -o -q -d data "$TEMPLATE_FILE"
+    unzip -o -q -d data .
     find data -name "*.tar.gz" -execdir tar -xzf {} \;
 
     # Run from data/ so the globs in up.sql do not scan the whole repository
